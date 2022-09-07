@@ -1,8 +1,8 @@
 
-rm(list=ls())
-gc()
 
 library(tidyverse)
+library(here)
+here()
 beta_zero <- 3.52
 beta_um  <-  6.2
 beta_dois <-  3.47
@@ -29,9 +29,9 @@ beta_quatro_linha <- 6.7
 
 # formatC(numero, format = "f", digits = 3)
 
-sao_paulo_properties <- read.csv("//wilbor/C/Lixo/leonardomakoto/doutorado_estatística/MAE59040501 - Aprendizagem Estatística em Altas Dimensões (2022)/aulas/aula2/sao-paulo-properties.csv")
+sao_paulo_properties <- read.csv(here("aula2", "sao-paulo-properties.csv"))
 
-db <- sao_paulo_properties %>% 
+db <- sao_paulo_properties %>%
   filter(Negotiation.Type == "rent")
 
 fit <- lm(Price ~ Condo + Size + Rooms + Toilets + Suites + Parking + Furnished, db)
@@ -41,11 +41,11 @@ dados_predicao <- data.frame(t(c(Condo = 1000, Size = 55, Rooms = 2, Toilets = 1
 
 (predicao <- predict(fit, dados_predicao))
 formatC(1678.432, format = "f", digits = 3)
-#1678.432 
+#1678.432
 
 
 
-db <- db %>% 
+db <- db %>%
   mutate( predito =predict(fit, db))
 
 (eqm_amostra <- sum((db$Price - db$predito)^2) / count(db))
@@ -69,7 +69,7 @@ sm_2 <- summary(fit_2)
 
 formatC((mean(sm_2$residuals^2)), format = "f", digits = 3)
 
-db <- db %>% 
+db <- db %>%
   mutate( predito_2 =predict(fit_2, db))
 
 (eqm_dois_amostra <- sum((db$Price - db$predito_2)^2) / count(db))
